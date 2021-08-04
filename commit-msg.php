@@ -16,14 +16,6 @@ endif;
 preg_match('/\s(breaking|feat):/', $sCommitText, $arMatches);
 $bNeedTaskId = (!empty($arMatches));
 
-// Проверка задачи
-preg_match('/#(\d+).\s/', $sCommitText, $arMatches);
-if ($bNeedTaskId and empty($arMatches) or empty((int)$arMatches[1])):
-  echo "Неверно указан номер задачи\n";
-  echo "Формат коммита: DR#taskId. type: Commit text";
-  exit(2);
-endif;
-
 // Проверка типов коммита
 $arTypes = ['breaking', 'feat', 'fix', 'refactor', 'config', 'docs'];
 $sTypes = implode('|', $arTypes);
@@ -31,6 +23,14 @@ preg_match("/\s($sTypes):/", $sCommitText, $arMatches);
 if (empty($arMatches)):
   echo "Тип коммита указан неверно!\n";
   echo "Возможные типы: $sTypes\n";
+  echo "Формат коммита: DR#taskId. type: Commit text";
+  exit(2);
+endif;
+
+// Проверка задачи
+preg_match('/#(\d+).\s/', $sCommitText, $arMatches);
+if ($bNeedTaskId and empty($arMatches) or empty((int)$arMatches[1])):
+  echo "Неверно указан номер задачи\n";
   echo "Формат коммита: DR#taskId. type: Commit text";
   exit(3);
 endif;
@@ -46,4 +46,11 @@ preg_match('/:\s(.)/u', $sCommitText, $arMatches);
 if (empty((int)$arMatches[1]) and $arMatches[1] != mb_strtoupper($arMatches[1])):
   echo "Первая буква коммита не является заглавной";
   exit(5);
+endif;
+
+// Проверка текста коммита на пустоту
+preg_match('/:\s(.+)/u', $sCommitText, $arMatches);
+if (empty($arMatches) or empty(trim($arMatches[1]))):
+  echo "Не указан текст коммита";
+  exit(6);
 endif;
