@@ -1,4 +1,4 @@
-Содержимое файла `.git/hooks/commit-msg`
+Создать файл `.git/hooks/commit-msg` со следующим содержимым:
 ```shell
 #!/bin/bash
 message=`cat $1`
