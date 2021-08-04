@@ -29,7 +29,7 @@ endif;
 
 // Проверка задачи
 preg_match('/#(\d+).\s/', $sCommitText, $arMatches);
-if ($bNeedTaskId and empty($arMatches) or empty((int)$arMatches[1])):
+if ($bNeedTaskId and (empty($arMatches) or empty((int)$arMatches[1]))):
   echo "Неверно указан номер задачи\n";
   echo "Формат коммита: DR#taskId. type: Commit text";
   exit(3);
